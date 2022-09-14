@@ -1,6 +1,9 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import AddForm from './Add-post-form';
+import AddComment from './Add-comment-form';
+
 
 export default class Post extends React.Component {
   constructor(props) {
@@ -20,8 +23,39 @@ export default class Post extends React.Component {
       showPosts: true,
     });
   }
+   handleAddPost = async(e) => {
+    e.preventDefault();
+    const url = `${process.env.REACT_APP_EXPRESS_URL}/post`;
+    let obj = {
+      title:e.target.formBasicTitle.value,
+      description:e.target.formBasicDescription.value
+    }
+    console.log(obj);
+    await axios.post(url,obj);
+    this.componentDidMount();
+
+  }
+
+  handleAddComment = async(e) => {
+    e.preventDefault();
+    const obj = {
+      description:e.target.formBasicDescription.value,
+      name:e.target.formBasicName.value,
+      postID:e.target.formBasicPostID.value
+    }
+    console.log(obj);
+    const url = `${process.env.REACT_APP_EXPRESS_URL}/comment/${obj.postID}`;
+    await axios.post(url,obj);
+    this.componentDidMount(); 
+
+  }
   render() {
     return (
+      <div>
+      <section className='forms-container'>
+      <AddForm handleAddPost={(e)=>this.handleAddPost(e)} />
+      <AddComment handleAddComment={(e) => this.handleAddComment(e)} />
+      </section>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -33,15 +67,15 @@ export default class Post extends React.Component {
         </thead>
         <tbody>
           {this.state.showPosts &&
-            this.state.posts.map((item) => {
+            this.state.posts.map((item,idx) => {
               return (
-                <tr>
+                <tr key={idx}>
                   <td>{item.id}</td>
                   <td>{item.title}</td>
                   <td>{item.description}</td>
-                  {item.coments.map((item) => {
+                  {item.coments.map((item, idx) => {
                     return (
-                        <>
+                        <div key={idx}>
                       <thead>
                         <tr>
                           <th>name</th>
@@ -54,7 +88,7 @@ export default class Post extends React.Component {
                         <td>{item.description}</td>
                       </tr>
                       </tbody>
-                      </>
+                      </div>
                     );
                   })}
                 </tr>
@@ -62,6 +96,7 @@ export default class Post extends React.Component {
             })}
         </tbody>
       </Table>
+      </div>
     );
   }
 }
