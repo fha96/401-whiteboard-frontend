@@ -9,7 +9,7 @@ export default class AddForm extends React.Component {
         return(
             <div className="add-form-container">
                 <h2>Add Post</h2>
-            <Form onSubmit={this.props.handleAddPost}>
+            <Form onSubmit={this.props.handleAddPost} className="post">
       <Form.Group className="mb-4" controlId="formBasicTitle">
         <Form.Label>Title of the post</Form.Label>
         <Form.Control type="text" placeholder="Enter the title" />

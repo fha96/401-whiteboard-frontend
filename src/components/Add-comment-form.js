@@ -8,7 +8,7 @@ export default class AddComment extends React.Component {
     return (
       <div className="add-form-container">
         <h2>Add Comment</h2>
-        <Form onSubmit={this.props.handleAddComment}>
+        <Form onSubmit={this.props.handleAddComment} className="comment">
           <Form.Group className="mb-3" controlId="formBasicDescription">
             <Form.Label>Description</Form.Label>
             <Form.Control type="text" placeholder="Enter the description" />

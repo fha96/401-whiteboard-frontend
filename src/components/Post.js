@@ -56,6 +56,7 @@ export default class Post extends React.Component {
       <AddForm handleAddPost={(e)=>this.handleAddPost(e)} />
       <AddComment handleAddComment={(e) => this.handleAddComment(e)} />
       </section>
+      <div className="table">
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -76,6 +77,7 @@ export default class Post extends React.Component {
                   {item.coments.map((item, idx) => {
                     return (
                         <div key={idx}>
+                          <Table>
                       <thead>
                         <tr>
                           <th>name</th>
@@ -88,6 +90,7 @@ export default class Post extends React.Component {
                         <td>{item.description}</td>
                       </tr>
                       </tbody>
+                      </Table>
                       </div>
                     );
                   })}
@@ -96,6 +99,7 @@ export default class Post extends React.Component {
             })}
         </tbody>
       </Table>
+      </div>
       </div>
     );
   }
