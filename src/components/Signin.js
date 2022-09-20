@@ -41,7 +41,8 @@ export default class extends Component {
 
   render() {
     return (
-      <div className="sign">
+      
+        <div className="sign">
         <Form onSubmit={this.handleSignin}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -59,6 +60,7 @@ export default class extends Component {
         Sign in
       </Button>
     </Form>
+      
     {
         this.state.loggedin && 
         <>
@@ -66,6 +68,11 @@ export default class extends Component {
         <Navigate to='/post'/>
         </>
     }
+      {
+          !this.state.loggedin &&
+          <Navigate to='/' />
+      }
+   
     {
         !this.state.loggedin &&
         <p>{this.state.errorMsg}</p>
