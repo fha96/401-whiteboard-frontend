@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import base64 from 'base-64';
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import cookies from 'react-cookies';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default class extends Component {
 
@@ -28,6 +29,11 @@ export default class extends Component {
                 Authorization:`Basic ${encodedData}`
             }
         }).then(resolve =>{
+          console.log(resolve.data);
+          cookies.save('token',resolve.data.token);
+          cookies.save('userID', resolve.data.id);
+          cookies.save('email', resolve.data.email);
+          cookies.save('userName', resolve.data.userName);
             this.setState({
                 loggedin:true
             })
@@ -41,7 +47,9 @@ export default class extends Component {
 
   render() {
     return (
-      <div className="sign">
+      
+        <div className="sign">
+
         <Form onSubmit={this.handleSignin}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -59,6 +67,7 @@ export default class extends Component {
         Sign in
       </Button>
     </Form>
+      
     {
         this.state.loggedin && 
         <>
@@ -66,6 +75,7 @@ export default class extends Component {
         <Navigate to='/post'/>
         </>
     }
+   
     {
         !this.state.loggedin &&
         <p>{this.state.errorMsg}</p>

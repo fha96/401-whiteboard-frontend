@@ -36,3 +36,14 @@ border-radius: 3px;
   margin: auto;
   width: 90% !important;
 }
+#logout {
+ float: left;
+ margin: 20px;
+ border-radius: 3px;
+ background-color:darkgreen;
+}
+
+#logout:hover {
+  opacity: 0.85;
+  transition: 0.25s;
+}

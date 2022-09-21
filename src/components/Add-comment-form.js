@@ -13,11 +13,6 @@ export default class AddComment extends React.Component {
             <Form.Label>Description</Form.Label>
             <Form.Control type="text" placeholder="Enter the description" />
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Your name</Form.Label>
-            <Form.Control type="text" placeholder="optional" />
-          </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPostID">
             <Form.Label>Please Enter the number of post</Form.Label>
             <Form.Control type="text" placeholder="required" />
