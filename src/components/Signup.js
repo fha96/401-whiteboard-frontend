@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
 
 export default class Signup extends Component {
 
@@ -67,7 +66,7 @@ export default class Signup extends Component {
     </Form>
     {
         this.state.signedup &&
-        <Navigate to='/post' />
+        <p>Account has been created succesfully.<br/> Please Signin</p>
     }
     {
         !this.state.signedup &&
