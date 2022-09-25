@@ -46,13 +46,18 @@ export default class Post extends React.Component {
       description:e.target.formBasicDescription.value
     }
     console.log(obj);
-    await axios.post(url,obj);
+    await axios.post(url,obj, {
+      headers:{
+        Authorization: `Bearer ${cookies.load('token')}`
+      }
+    });
     this.componentDidMount();
 
   }
 
   handleAddComment = async(e) => {
     e.preventDefault();
+    console.log(cookies.load('userName'))
     const userID = cookies.load('userID');
     const obj = {
       description:e.target.formBasicDescription.value,
@@ -62,7 +67,7 @@ export default class Post extends React.Component {
     console.log(obj);
     const url = `${process.env.REACT_APP_EXPRESS_URL}/comment/${obj.postID}/${userID}`;
     const data =await axios.post(url,obj);
-    console.log(data.data)
+    console.log(data.data);
     this.componentDidMount(); 
 
   }
