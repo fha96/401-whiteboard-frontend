@@ -5,6 +5,8 @@ import AddForm from './Add-post-form';
 import AddComment from './Add-comment-form';
 import { Navigate } from "react-router-dom";
 import cookies from 'react-cookies';
+import { Button } from "react-bootstrap";
+import UpdateModal from "./UpdateModal";
 export default class Post extends React.Component {
   constructor(props) {
     super(props);
@@ -12,8 +14,9 @@ export default class Post extends React.Component {
     this.state = {
       posts: [],
       showPosts: false,
-      loggedout:false
-      
+      loggedout:false,
+      showModal:false,
+      tempId:''
     };
   }
   async componentDidMount() {
@@ -63,12 +66,82 @@ export default class Post extends React.Component {
     this.componentDidMount(); 
 
   }
+  handleDelete = async(id) => {
+    const token = cookies.load('token');
+    const url = `${process.env.REACT_APP_EXPRESS_URL}/post/${id}`;
+    try {
+      if(token){
+        await axios.delete(url, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
+        alert('Post has been deleted Successfully');
+        await axios.get(`${process.env.REACT_APP_EXPRESS_URL}/post`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        }).then(resolve => this.setState({
+          posts:resolve.data
+        })).catch(rejected => alert(rejected.response.data));      
+      }
+    } catch (error) {
+      alert(`Error while deleting ${error.response.data}`);
+    }
 
+
+  }
+
+  handleUpdate = (id) => {
+    this.setState({
+      showModal:true,
+      tempId:id
+    });
+  }
+
+  handleClose = () => {
+    this.setState({
+      showModal:false
+    });
+  }
+
+  handleEdit = async (e) => {
+    console.log('Inside Edit');
+    e.preventDefault();
+    const token = cookies.load('token');
+    const id = this.state.tempId;
+    const data = {
+      title:e.target.formBasicTitle.value,
+      description: e.target.formBasicDescription.value
+    }
+    const url = `${process.env.REACT_APP_EXPRESS_URL}/post/${id}`;
+    try {
+      if(token){
+        await axios.put(url, data, {
+          headers:{
+            Authorization: `Bearer ${cookies.load('token')}`
+          }
+        }).then(() => alert('Post has been Updated succesfully')).catch(rejected => alert(rejected.response.data));
+  }
+  await axios.get(`${process.env.REACT_APP_EXPRESS_URL}/post`, {
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }).then(resolve => this.setState({
+    posts:resolve.data
+  })).catch(rejected => alert(rejected.response.data));
+
+
+} catch(error){
+  alert(error.message);
+}
+}
   handleLogout = () => {
     cookies.remove('userID');
     cookies.remove('userName');
     cookies.remove('email');
     cookies.remove('token');
+    cookies.remove('role');
     this.setState({
       loggedout:true
     });
@@ -90,6 +163,10 @@ export default class Post extends React.Component {
             <th>#</th>
             <th>Title</th>
             <th>Description</th>
+            {
+              cookies.load('role') === 'admin' &&
+            <th>For Admins</th>
+            }
             <th>Comments</th>
           </tr>
         </thead>
@@ -101,6 +178,26 @@ export default class Post extends React.Component {
                   <td>{item.id}</td>
                   <td>{item.title}</td>
                   <td>{item.description}</td>
+                  {
+                     cookies.load('role') === 'admin' &&
+                  <td>
+                    <Button onClick={ ()  => this.handleDelete(item.id)}>
+                    Delete
+                    </Button>
+                    <br/>
+                    <br/>
+                    <Button onClick={() => this.handleUpdate(item.id)}>
+                      Update
+                    </Button>
+                     </td>
+                  }
+                 
+                    <UpdateModal 
+                    show={this.state.showModal} 
+                    handleClose = {this.handleClose}
+                    handleEdit = { this.handleEdit}
+                    />
+                 
                   {item.comments.map((item, idx) => {
                     return (
                         <div key={idx}>

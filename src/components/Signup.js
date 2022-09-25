@@ -18,14 +18,18 @@ export default class Signup extends Component {
         let userData = {
             userName:e.target.formBasicusername.value,
             email:e.target.formBasicEmail.value,
-            password:e.target.formBasicPassword.value
+            password:e.target.formBasicPassword.value,
+            role:e.target.fromBasicSelect.value
         }
+        console.log(userData);
         axios.post(`${process.env.REACT_APP_EXPRESS_URL}/signup`,userData).then(res => this.setState({
             signedup:true
         })).catch(reject => this.setState({
             errorMsg:reject.response.data
         }));
     }
+   
+    
 
 
   render() {
@@ -48,7 +52,15 @@ export default class Signup extends Component {
         <Form.Label>Password</Form.Label>
         <Form.Control type="text" placeholder="Password" />
       </Form.Group>
-     
+
+      <Form.Group className="mb-3" controlId='fromBasicSelect'>    
+          <Form.Label>Select your role : </Form.Label>
+        <Form.Select>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+        </Form.Select>
+      </Form.Group>
+ 
       <Button variant="primary" type="submit">
         Sign up
       </Button>
