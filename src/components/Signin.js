@@ -34,9 +34,10 @@ export default class extends Component {
           cookies.save('userID', resolve.data.id);
           cookies.save('email', resolve.data.email);
           cookies.save('userName', resolve.data.userName);
+          cookies.save('role', resolve.data.role);
             this.setState({
                 loggedin:true
-            })
+            });
         }).catch(rejected =>{ 
             console.log(rejected.response.data);
             this.setState({errorMsg:rejected.response.data})
